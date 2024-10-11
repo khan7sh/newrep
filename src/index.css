@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Lato:wght@300;400;700&display=swap');
+@import 'react-datepicker/dist/react-datepicker.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+body {
+  @apply font-sans text-gray-800;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-serif;
+}
+
+.btn {
+  @apply font-serif font-bold py-2 px-6 rounded transition duration-300 ease-in-out text-xl;
+}
+
+.btn-primary {
+  @apply bg-burgundy text-cream hover:bg-opacity-90;
+}
+
+.btn-secondary {
+  @apply bg-green text-cream hover:bg-opacity-90;
+}
+
+.section-title {
+  @apply text-3xl md:text-4xl font-bold mb-8 text-burgundy;
+}
+
+section {
+  @apply py-16;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden;
+}
+
+.card-body {
+  @apply p-4;
+}
+
+/* Rest of the existing styles... */
