@@ -12,7 +12,7 @@ const PrivacyPolicy: React.FC = () => {
         </Link>
         <h1 className="text-4xl font-bold text-burgundy mb-8">Privacy Policy</h1>
         <div className="prose prose-burgundy">
-          <p>Last updated: [Current Date]</p>
+          <p>Last updated: [15.10.2024]</p>
           <p>At Noshe Cambridge, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal information when you visit our website or use our services.</p>
           
           <h2>Information We Collect</h2>
