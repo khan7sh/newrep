@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         burgundy: '#8B2635',
+        'burgundy-dark': '#6B1D29', // Added darker shade of burgundy
         cream: '#F5EBE0',
         green: '#4A5D23',
         brown: '#8B4513',

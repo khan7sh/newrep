@@ -22,5 +22,4 @@ const Root = () => {
     </StrictMode>
   )
 }
-
 createRoot(document.getElementById('root')!).render(<Root />)

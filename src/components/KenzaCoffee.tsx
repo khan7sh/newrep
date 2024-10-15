@@ -6,11 +6,11 @@ const KenzaCoffee: React.FC = () => {
   return (
     <section id="coffee" className="bg-white py-16">
       <div className="container mx-auto px-4">
-        <h2 className="section-title text-center text-green mb-12" data-aos="fade-up">
-          Kenza Coffee
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <div data-aos="fade-right">
+            <h2 className="section-title text-green mb-8" data-aos="fade-up">
+              Kenza Coffee
+            </h2>
             <p className="mb-4 text-gray-700">
               At Noshe, we take pride in our house-roasted coffee, Kenza. Our master roasters carefully select the finest beans from around the world, with a focus on Afghan and neighboring regions' varieties.
             </p>
@@ -24,7 +24,7 @@ const KenzaCoffee: React.FC = () => {
               Explore Kenza Coffee
             </Link>
           </div>
-          <div className="bg-brown p-8 rounded-lg text-cream mt-8 md:mt-0" data-aos="fade-left">
+          <div className="bg-brown p-8 rounded-lg text-cream" data-aos="fade-left">
             <Coffee className="w-16 h-16 mb-4" />
             <h3 className="text-2xl font-serif font-bold mb-2 text-beige">Kenza Coffee Offerings</h3>
             <ul className="space-y-2">

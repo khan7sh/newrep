@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Coffee } from 'lucide-react';
 
@@ -11,6 +11,10 @@ const CoffeeOption: React.FC<{ name: string; description: string; price: string 
 );
 
 const KenzaCoffeePage: React.FC = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-cream py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">

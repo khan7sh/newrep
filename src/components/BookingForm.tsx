@@ -2,186 +2,155 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { ChevronDown } from 'lucide-react';
+import axios from 'axios';
 
-interface BookingFormProps {
-  seatingType: 'table' | 'floor';
-}
+const BookingForm: React.FC = () => {
+  const { register, handleSubmit, control, formState: { errors } } = useForm();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
-const BookingForm: React.FC<BookingFormProps> = ({ seatingType }) => {
-  const { control, handleSubmit, watch } = useForm();
-  const [availableTimeSlots, setAvailableTimeSlots] = useState<string[]>([]);
-
-  const onSubmit = (data: any) => {
-    console.log(data);
-    // Here you would typically send the data to your backend
-    alert('Booking submitted successfully!');
+  const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    setSubmitMessage('');
+    try {
+      const response = await axios.post('/.netlify/functions/bookingConfirmation', data);
+      console.log('Response:', response.data); // Add this line for debugging
+      if (response.data.success) {
+        setSubmitMessage('Booking confirmed! Check your email for details.');
+      } else {
+        setSubmitMessage(response.data.message || 'There was an error processing your booking. Please try again.');
+      }
+    } catch (error) {
+      console.error('Booking error:', error);
+      setSubmitMessage('There was an error processing your booking. Please try again.');
+    }
+    setIsSubmitting(false);
   };
 
-  const selectedDate = watch('date');
-  const selectedGuests = watch('guests');
+  const isWeekday = (date: Date) => {
+    const day = date.getDay();
+    return day !== 1; // 1 represents Monday
+  };
 
-  React.useEffect(() => {
-    if (selectedDate && selectedGuests) {
-      // This is where you would typically fetch available time slots from your backend
-      // For now, we'll just set some dummy data
-      setAvailableTimeSlots(['18:00', '19:30', '21:00']);
+  const generateTimeOptions = () => {
+    const options = [];
+    for (let hour = 14; hour <= 21; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        options.push(<option key={time} value={time}>{time}</option>);
+      }
     }
-  }, [selectedDate, selectedGuests]);
+    return options;
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-      <input type="hidden" name="form-name" value="booking" />
-      <input type="hidden" name="seatingType" value={seatingType} />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <h3 className="text-2xl font-serif font-semibold text-burgundy mb-6">Reserve Your Table</h3>
       
-      <div className="md:col-span-1">
+      <div className="mb-4">
+        <p className="text-red-600 font-medium">Please note: We are closed on Mondays.</p>
+      </div>
+
+      <div className="mb-8">
+        <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">Select Date</label>
         <Controller
-          name="date"
           control={control}
-          rules={{ required: true }}
+          name="date"
+          rules={{ required: "Please select a date" }}
           render={({ field }) => (
             <DatePicker
-              {...field}
-              selected={field.value}
-              onChange={(date) => field.onChange(date)}
-              minDate={new Date()}
+              selected={selectedDate}
+              onChange={(date: Date) => {
+                setSelectedDate(date);
+                field.onChange(date);
+              }}
+              filterDate={isWeekday}
               inline
-              className="custom-calendar w-full"
-              calendarClassName="custom-calendar-large"
-              dayClassName={() => "custom-day"}
+              className="w-full"
+              calendarClassName="custom-datepicker mx-auto"
             />
           )}
         />
+        {errors.date && <p className="mt-1 text-sm text-red-600">{errors.date.message as string}</p>}
       </div>
 
-      <div className="md:col-span-1 space-y-6">
+      <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-1">
-            Number of Guests
-          </label>
-          <Controller
-            name="guests"
-            control={control}
-            rules={{ required: true, min: 1, max: 14 }}
-            render={({ field }) => (
-              <select
-                {...field}
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-burgundy focus:border-burgundy sm:text-sm rounded-md"
-              >
-                {[...Array(14)].map((_, i) => (
-                  <option key={i + 1} value={i + 1}>
-                    {i + 1} {i === 0 ? 'Guest' : 'Guests'}
-                  </option>
-                ))}
-              </select>
-            )}
-          />
-        </div>
-
-        {availableTimeSlots.length > 0 && (
-          <div>
-            <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-1">
-              Available Time Slots
-            </label>
-            <Controller
-              name="time"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <select
-                  {...field}
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-burgundy focus:border-burgundy sm:text-sm rounded-md"
-                >
-                  <option value="">Select a time</option>
-                  {availableTimeSlots.map((slot) => (
-                    <option key={slot} value={slot}>
-                      {slot}
-                    </option>
-                  ))}
-                </select>
-              )}
-            />
-          </div>
-        )}
-
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Name
-          </label>
-          <Controller
-            name="name"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <input
-                {...field}
-                type="text"
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-burgundy focus:border-burgundy sm:text-sm"
-              />
-            )}
-          />
+          <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+          <select
+            id="time"
+            {...register("time", { required: "Time is required" })}
+            className="block w-full px-4 py-3 rounded-md border-gray-300 shadow-sm focus:border-burgundy focus:ring focus:ring-burgundy focus:ring-opacity-50 transition duration-150 ease-in-out"
+          >
+            <option value="">Select time</option>
+            {generateTimeOptions()}
+          </select>
+          {errors.time && <p className="mt-1 text-sm text-red-600">{errors.time.message as string}</p>}
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <Controller
-            name="email"
-            control={control}
-            rules={{ required: true, pattern: /^\S+@\S+$/i }}
-            render={({ field }) => (
-              <input
-                {...field}
-                type="email"
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-burgundy focus:border-burgundy sm:text-sm"
-              />
-            )}
-          />
+          <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-1">Guests</label>
+          <select
+            id="guests"
+            {...register("guests", { required: "Number of guests is required" })}
+            className="block w-full px-4 py-3 rounded-md border-gray-300 shadow-sm focus:border-burgundy focus:ring focus:ring-burgundy focus:ring-opacity-50 transition duration-150 ease-in-out"
+          >
+            <option value="">Select guests</option>
+            {[...Array(14)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>{i + 1} {i === 0 ? 'guest' : 'guests'}</option>
+            ))}
+          </select>
+          {errors.guests && <p className="mt-1 text-sm text-red-600">{errors.guests.message as string}</p>}
         </div>
-
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-            Phone
-          </label>
-          <Controller
-            name="phone"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <input
-                {...field}
-                type="tel"
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-burgundy focus:border-burgundy sm:text-sm"
-              />
-            )}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="specialRequests" className="block text-sm font-medium text-gray-700 mb-1">
-            Special Requests
-          </label>
-          <Controller
-            name="specialRequests"
-            control={control}
-            render={({ field }) => (
-              <textarea
-                {...field}
-                rows={3}
-                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-burgundy focus:border-burgundy sm:text-sm"
-              />
-            )}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="btn btn-primary w-full"
-        >
-          Book Table
-        </button>
       </div>
+
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+        <input
+          type="text"
+          id="name"
+          {...register("name", { required: "Name is required" })}
+          className="block w-full px-4 py-3 rounded-md border-gray-300 shadow-sm focus:border-burgundy focus:ring focus:ring-burgundy focus:ring-opacity-50 transition duration-150 ease-in-out"
+        />
+        {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message as string}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input
+          type="email"
+          id="email"
+          {...register("email", { required: "Email is required", pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" } })}
+          className="block w-full px-4 py-3 rounded-md border-gray-300 shadow-sm focus:border-burgundy focus:ring focus:ring-burgundy focus:ring-opacity-50 transition duration-150 ease-in-out"
+        />
+        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message as string}</p>}
+      </div>
+
+      <div>
+        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+        <input
+          type="tel"
+          id="phone"
+          {...register("phone", { required: "Phone number is required", pattern: { value: /^[0-9+\-\s()]+$/, message: "Invalid phone number" } })}
+          className="block w-full px-4 py-3 rounded-md border-gray-300 shadow-sm focus:border-burgundy focus:ring focus:ring-burgundy focus:ring-opacity-50 transition duration-150 ease-in-out"
+        />
+        {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message as string}</p>}
+      </div>
+
+      <button 
+        type="submit" 
+        className="w-full bg-burgundy text-white py-3 px-4 rounded-md hover:bg-opacity-90 transition-colors text-lg font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-150"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? 'Booking...' : 'Book Table'}
+      </button>
+
+      {submitMessage && (
+        <p className={`mt-4 text-center ${submitMessage.includes('error') ? 'text-red-600' : 'text-green-600'}`}>
+          {submitMessage}
+        </p>
+      )}
     </form>
   );
 };

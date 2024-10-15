@@ -16,7 +16,7 @@ const About: React.FC = () => {
   return (
     <section id="about" className="bg-burgundy text-cream">
       <div className="container mx-auto">
-        <h2 className="section-title text-center mb-12 text-beige" data-aos="fade-up">About Noshe Cambridge</h2>
+        <h2 className="section-title section-title-light text-center mb-12" data-aos="fade-up">About Noshe Cambridge</h2>
         <div className="max-w-3xl mx-auto text-center mb-16" data-aos="fade-up" data-aos-delay="200">
           <p className="text-xl font-light leading-relaxed mb-8">
             Noshe (نوش) Cambridge, meaning "sweet" or "delicious" in Dari, brings the rich flavors of Afghanistan to the heart of Cambridge. Opened in early 2024, we blend traditional recipes with modern techniques, using locally sourced ingredients to create an authentic dining experience.

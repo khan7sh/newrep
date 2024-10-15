@@ -6,15 +6,21 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "netlify": "netlify dev",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@netlify/functions": "^1.6.0",
+    "@types/react-calendar": "^4.1.0",
     "@types/react-datepicker": "^7.0.0",
     "aos": "^2.3.4",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
     "lucide-react": "^0.344.0",
     "nodemailer": "^6.9.12",
     "react": "^18.3.1",
+    "react-calendar": "^5.0.0",
     "react-datepicker": "^7.4.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",

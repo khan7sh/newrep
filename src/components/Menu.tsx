@@ -2,6 +2,11 @@ import React from 'react'
 import { Utensils } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+// Import the images
+import mixedGrillImage from '../assets/Mixed_grill.jpg'
+import mantuImage from '../assets/Mantu.jpg'
+import lambChopsImage from '../assets/Lamb_Chops.jpg'
+
 const MenuItem: React.FC<{ title: string; description: string; price: string; imageUrl: string }> = ({ title, description, price, imageUrl }) => (
   <div className="card menu-item" data-aos="fade-up">
     <img src={imageUrl} alt={title} className="w-full h-48 object-cover rounded-t-lg" />
@@ -22,22 +27,22 @@ const Menu: React.FC = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <MenuItem 
-            title="Bolani"
-            description="Stuffed flatbread with potato and leeks"
-            price="£5.99"
-            imageUrl="https://images.unsplash.com/photo-1630409351217-bc4fa6422075?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            title="Mixed Grill"
+            description="A delicious assortment of grilled meats including lamb, chicken, and beef kebabs"
+            price="£16.99"
+            imageUrl={mixedGrillImage}
           />
           <MenuItem 
-            title="Kabuli Palao"
-            description="Afghanistan's national dish - rice with lamb, raisins, and carrots"
-            price="£14.99"
-            imageUrl="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            title="Mantu"
+            description="Steamed dumplings filled with seasoned ground beef and onions, topped with yogurt and lentil sauce"
+            price="£12.99"
+            imageUrl={mantuImage}
           />
           <MenuItem 
-            title="Afghan Shakshuka"
-            description="Eggs poached in a sauce of tomatoes, olive oil, and spices"
-            price="£9.99"
-            imageUrl="https://images.unsplash.com/photo-1590412200988-a436970781fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+            title="Lamb Chops"
+            description="Tender, marinated lamb chops grilled to perfection and served with Afghan-style rice"
+            price="£18.99"
+            imageUrl={lambChopsImage}
           />
         </div>
         <div className="text-center">
