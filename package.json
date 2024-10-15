@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp -r public dist/public",
+    "build": "vite build && mkdir -p public && cp -r public dist/public",
     "netlify": "netlify dev",
     "lint": "eslint .",
     "preview": "vite preview",
