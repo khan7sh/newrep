@@ -21,6 +21,17 @@ const handler: Handler = async (event) => {
   try {
     console.log('Received booking request:', event.body);
     const { name, email, phone, date, time, guests } = JSON.parse(event.body || '{}');
+    console.log('Parsed data:', { name, email, phone, date, time, guests });
+
+    console.log('Creating transporter with:', {
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: process.env.SMTP_SECURE,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: '********' // Don't log the actual password
+      }
+    });
 
     const customerEmail = {
       from: '"Noshe Cambridge" <bookings@noshecambridge.co.uk>',
