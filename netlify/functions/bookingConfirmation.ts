@@ -20,8 +20,8 @@ const handler: Handler = async (event) => {
 
   try {
     console.log('Received booking request:', event.body);
-    const { name, email, phone, date, time, guests } = JSON.parse(event.body || '{}');
-    console.log('Parsed data:', { name, email, phone, date, time, guests });
+    const { name, email, phone, date, time, guests, specialRequests } = JSON.parse(event.body || '{}');
+    console.log('Parsed data:', { name, email, phone, date, time, guests, specialRequests });
 
     console.log('Creating transporter with:', {
       host: process.env.SMTP_HOST,
@@ -44,6 +44,7 @@ Thank you for booking a table at Noshe Cambridge. Your reservation details are a
 Date: ${date}
 Time: ${time}
 Number of guests: ${guests}
+${specialRequests ? `Special Requests: ${specialRequests}` : ''}
 
 We look forward to welcoming you!
 
@@ -62,7 +63,8 @@ Email: ${email}
 Phone: ${phone}
 Date: ${date}
 Time: ${time}
-Number of guests: ${guests}`,
+Number of guests: ${guests}
+${specialRequests ? `Special Requests: ${specialRequests}` : ''}`,
     };
 
     console.log('Sending customer email');

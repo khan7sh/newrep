@@ -138,6 +138,15 @@ const BookingForm: React.FC = () => {
         {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message as string}</p>}
       </div>
 
+      <div>
+        <label htmlFor="specialRequests" className="block text-sm font-medium text-gray-700 mb-1">Special Requests</label>
+        <textarea
+          id="specialRequests"
+          {...register("specialRequests")}
+          className="block w-full px-4 py-3 rounded-md border-gray-300 shadow-sm focus:border-burgundy focus:ring focus:ring-burgundy focus:ring-opacity-50 transition duration-150 ease-in-out"
+        />
+      </div>
+
       <button 
         type="submit" 
         className="w-full bg-burgundy text-white py-3 px-4 rounded-md hover:bg-opacity-90 transition-colors text-lg font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-150"
